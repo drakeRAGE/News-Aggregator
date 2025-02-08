@@ -9,10 +9,15 @@ const NewsLikeSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
+    index: true, // Index for user-based queries
   },
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  deletedAt: { // Soft delete field
+    type: Date,
+    default: null,
   },
 });
 

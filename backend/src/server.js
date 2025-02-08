@@ -21,10 +21,21 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/news-likes', newsLikeRoutes);
 app.use('/api/saved-articles', savedArticleRoutes);
 
-// Error handling middleware
+// ❗ Ensure 404 middleware is placed BEFORE the error handler
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: 'Not Found',
+  });
+});
+
+// ❗ Global Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+  });
 });
 
 const PORT = process.env.PORT || 5000;
